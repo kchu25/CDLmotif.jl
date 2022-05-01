@@ -8,7 +8,7 @@
 
 # Introduction
 
-This is a DNA-sequence-motif discovery method based on convolutional dictionary learning. 
+This is a DNA-sequence-motif discovery method based on convolutional dictionary learning. More details on the implementations and derivations of the model are coming soon.
 
 # Usage:
 In the Julia environment, import CDLmotif, and then use any of the two following subroutines:
