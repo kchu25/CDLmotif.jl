@@ -81,7 +81,7 @@ Please contact <skchu@wustl.edu> or raise an issue on the github repo with any q
 
 We have not added this package to the Julia registry yet. To use this software, one way to do so is to simply clone it, and enter the following in your julia code
 ```julia
-push!(LOAD_PATH, "<path to the folder that contains CDLmotif.jl>")    
+push!(LOAD_PATH, <path to the folder that contains CDLmotif.jl>)    
 ```
 before you type 
 ```
