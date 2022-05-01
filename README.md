@@ -59,7 +59,7 @@ The output folder will look something like this:
     ├── ...
     └── <fasta_K>
 
-Motifs that are discovered will be stored in the *transfac* format as count matrices (for which it is straightforward to transform them into PWMs). A summary on the motif discovery results in documented in ```summary.html``` in each folder.
+Motifs that are discovered will be stored in the *transfac* format as count matrices (for which it is straightforward to transform them into PWMs). A summary on the motif discovery results is documented in ```summary.html``` in each folder.
 
 # Software requirements:
 ### Weblogo
