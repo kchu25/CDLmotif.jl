@@ -8,7 +8,9 @@
 
 # Introduction
 
-This is a DNA-sequence-motif discovery method based on convolutional dictionary learning. More details on the implementations and derivations of the model are coming soon.
+This is a DNA-sequence-motif discovery method based on convolutional dictionary learning. More details on the implementations and derivations of the model are coming soon. 
+
+Anything being in the form that's enclosed by a left and right bracket, i.e., ```<somthing>```, means that it is string to be determined.
 
 # Usage:
 In the Julia environment, import CDLmotif, and then use any of the two following subroutines:
@@ -36,25 +38,25 @@ Please check below for a quick reference on the usage and software/hardware requ
 
 # Find motifs for multiple fasta files
 
-The input folder will look like this:
+The input folder should look something like this:
 
     input-folder
-    ├── fasta_1.fa
-    ├── fasta_2.fa
-    ├── fasta_3.fa
+    ├── <fasta_1>.fa
+    ├── <fasta_2>.fa
+    ├── <fasta_3>.fa
     ├── ...
-    └── fasta_K.fa
+    └── <fasta_K>.fa
 
-The output folder will look like this:
+The output folder will look something like this:
 
     output-folder
-    ├── fasta_1
+    ├── <fasta_1>
     |   ├── logos
-    |   └──  summary.html
-    ├── fasta_2
-    ├── fasta_3
+    |   └── summary.html
+    ├── <fasta_2>
+    ├── <fasta_3>
     ├── ...
-    └── fasta_K
+    └── <fasta_K>
 
 # Software requirements:
 This software currently requires installation of [MEME](https://meme-suite.org/meme/doc/download.html) (We use MEME's utility function fasta-shuffle-letters to create a control dataset to calculate the significance of each discovered motif using fisher exact test). Once MEME is installed, make sure you add MEME's utilities path to your PATH environment. On Linux operating systems, this is done by adding the following line to your .bashrc:
