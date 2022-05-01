@@ -69,7 +69,7 @@ export PATH=<path to where MEME is installed>/meme/bin:$PATH
 More details on this later.
 
 # Contact
-Please contact <skchu@wustl.edu> or raise an issue on the github repor with any questions about installation or usage.
+Please contact <skchu@wustl.edu> or raise an issue on the github repo with any questions about installation or usage.
 
 # Notes
 - We plan to drop the dependence to MEME's utilitiies in the near future.
