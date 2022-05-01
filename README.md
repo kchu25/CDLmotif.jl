@@ -78,3 +78,12 @@ Please contact <skchu@wustl.edu> or raise an issue on the github repo with any q
 - We plan to extend this software to a standalone application so that the Julia language will no longer be required. This can be done from packages like [PackageCompiler.jl](https://github.com/JuliaLang/PackageCompiler.jl/). However, there's currently a bug related to [packages that depend on LLVM.jl](https://github.com/JuliaLang/PackageCompiler.jl/issues/682) that prevents this from being realized. We may implement a c++ version of this software if the LLVM-dependency issue is not resolved soon.
 - Currently, we rank the motifs on the result page via the sum of likelihood ratio scores. We will add the motif significance for each discovered motif soon.
 - More documentation and extensions on optional inputs on adjusting the hyperparameters are coming soon.
+
+We have not added this package to the Julia registry yet. To use this software, one way to do so is to simply clone it, and enter the following in your julia code
+```julia
+push!(LOAD_PATH, "<path to the folder that contains CDLmotif.jl>")    
+```
+before you type 
+```
+using CDLmotif
+```
