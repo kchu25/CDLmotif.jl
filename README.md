@@ -15,28 +15,26 @@ This is a motif discovery method based on convolutional dictionary learning.
 using CDLmotif
 
 # Find motifs in a single fasta file
-find_motifs_fasta(<fasta-filepath>, <output-folder>)
-
-# Find motifs for multiple fasta files
-find_motifs_fasta_folder(<input-folder>, <output-folder>)
-```
-
-Please refer below for a quick reference on the usage and software/hardware requirements.
-
-# Find motifs for a single fasta file
-```julia
 # <fasta-filepath>: A string that's the input fasta file's absolute filepath.
 # <output-folder>: A string that's the output folder's absolute filepath; 
 #                  all the motif discovery results will be stored here.
-```
-
+find_motifs_fasta(<fasta-filepath>, <output-folder>)
 
 # Find motifs for multiple fasta files
-```julia
 # <input-folder>: A string that's the input folder's absolute file path; 
 #                 the input folder contains multiple fasta files. The folder 
 #                 *must* contain only fasta files.
+# <output-folder>: A string that's the output folder's absolute file path;
+#                  this output folder will contain multiple folders. Each 
+#                  folder will store the motif discovery results that 
+#                  correspond to an input fasta file.
+find_motifs_fasta_folder(<input-folder>, <output-folder>)
 ```
+
+Please check below for a quick reference on the usage and software/hardware requirements.
+
+# Find motifs for multiple fasta files
+
 The input folder will look like this:
 
     input-folder
@@ -47,10 +45,7 @@ The input folder will look like this:
     └── fasta_K.fa
 
 ```julia    
-# <output-folder>: A string that's the output folder's absolute file path;
-#                  this output folder will contain multiple folders. Each 
-#                  folder will store the motif discovery results that 
-#                  correspond to an input fasta file.
+
 ```
 The output folder will look like this:
 
