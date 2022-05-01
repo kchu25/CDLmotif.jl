@@ -63,9 +63,9 @@ Motifs that are discovered will be stored in the *transfac* format as count matr
 
 # Software requirements:
 ### Weblogo
- This software currently requires the installation of [Weblogo](http://weblogo.threeplusone.com/manual.html#download). You can install Weblogo via the following command (with python installed beforehand):
+ This software currently requires the installation of [Weblogo](http://weblogo.threeplusone.com/manual.html#download). You can install Weblogo via the following command (with python3 installed beforehand):
  ```bash
- pip install weblogo
+ pip3 install weblogo
  ```
 And you can check if you have weblogo installed by typing in your command line by the following command:
 ```bash
