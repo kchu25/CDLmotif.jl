@@ -17,30 +17,35 @@ import the CDLmotif library
     using CDLmotif
 
     # Find motifs in a single fasta file
-    find_motifs_fasta("<fasta filepath>", "<output folder>")
+    find_motifs_fasta(<fasta filepath>, <output folder>)
 
     # Find motifs for multiple fasta files
-    find_motifs_fasta_folder("<input folder>", "<output folder>")
+    find_motifs_fasta_folder(<input folder>, <output folder>)
 
+Please refer below for a quick reference on the usage and software/hardware requirements.
 
 # Find motifs for a single fasta file
-"\<fasta filepath\>": a string that's the input fasta file's absolute filepath.
+\<fasta filepath\>: a string that's the input fasta file's absolute filepath.
 
-"\<output folder\>":  a string that's the output folder's absolute filepath; all the motif discovery results will be stored here.
+\<output folder\>:  a string that's the output folder's absolute filepath; all the motif discovery results will be stored here.
 
 # Find motifs for multiple fasta files
-"\<input folder\>": a string that's the input folder's absolute file path; the input folder contains multiple fasta files.
+\<input folder\>: a string that's the input folder's absolute file path; the input folder contains multiple fasta files.
 
-"\<output folder\>": a string that's the output folder's absolute file path; this output folder will contain multiple folders. Each folder will store the motif discovery results that correspond to a input fasta file.
+\<output folder\>: a string that's the output folder's absolute file path; this output folder will contain multiple folders. Each folder will store the motif discovery results that correspond to a input fasta file.
 
 
 # Software requirements:
 
+
 # Hardware requirements:
+
+
 
 # Cite
 More details on this later.
 
 # Contact
-Please contact 
+Please contact <skchu@wustl.edu> or raise an issue on the github repor with any questions about installation or usage.
 
+# Notes
