@@ -25,20 +25,17 @@ Please refer below for a quick reference on the usage and software/hardware requ
 
 # Find motifs for a single fasta file
 ```julia
-# <fasta-filepath>: A string that's the input fasta 
-#                   file's absolute filepath.
-# <output-folder>: A string that's the output folder's 
-#                  absolute filepath; all the motif 
-#                  discovery results will be stored here.
+# <fasta-filepath>: A string that's the input fasta file's absolute filepath.
+# <output-folder>: A string that's the output folder's absolute filepath; 
+#                  all the motif discovery results will be stored here.
 ```
 
 
 # Find motifs for multiple fasta files
 ```julia
-# <input-folder>: A string that's the input folder's 
-#                 absolute file path; the input folder
-#                 contains multiple fasta files. The 
-#                 folder *must* contain only fasta files.
+# <input-folder>: A string that's the input folder's absolute file path; 
+#                 the input folder contains multiple fasta files. The folder 
+#                 *must* contain only fasta files.
 ```
 The input folder will look like this:
 
@@ -50,11 +47,10 @@ The input folder will look like this:
     └── fasta_K.fa
 
 ```julia    
-# <output-folder>: A string that's the output folder's 
-#                  absolute file path; this output folder 
-#                  will contain multiple folders. Each 
-#                  folder will store the motif discovery 
-#                  results that correspond to an input fasta file.
+# <output-folder>: A string that's the output folder's absolute file path;
+#                  this output folder will contain multiple folders. Each 
+#                  folder will store the motif discovery results that 
+#                  correspond to an input fasta file.
 ```
 The output folder will look like this:
 
