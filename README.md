@@ -8,7 +8,7 @@
 
 # Introduction
 
-This is a motif discovery method based on convolutional dictionary learning. 
+This is a DNA-sequence-motif discovery method based on convolutional dictionary learning. 
 
 # Usage:
 ```julia
@@ -73,5 +73,6 @@ Please contact <skchu@wustl.edu> or raise an issue on the github repor with any 
 
 # Notes
 - We plan to drop the dependence to MEME's utilitiies in the near future.
-- Julia uses a just-in-time compiler, which means that software written in Julia needs to be pre-compiled before its execution. We hope to get rid of this so that this application can be more easily integrated into the bioinformatics pipeline (e.g., snakemake; see point below)
+- Julia uses a just-in-time compiler, which means that software written in Julia needs to be pre-compiled before its execution. We hope to get rid of this so that this application can be more easily integrated into the bioinformatics pipeline (e.g., snakemake; see point below).
 - We plan to extend this software to a standalone application so that the Julia language will no longer be required. This can be done from packages like [PackageCompiler.jl](https://github.com/JuliaLang/PackageCompiler.jl/). However, there's currently a bug related to [packages that depend on LLVM.jl](https://github.com/JuliaLang/PackageCompiler.jl/issues/682) that prevents this from being realized. We may implement a c++ version of this software if the LLVM-dependency issue doesn't get resolved soon.
+- We will add the motif significance for each discovered motif soon.

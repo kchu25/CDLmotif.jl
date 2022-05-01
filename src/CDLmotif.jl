@@ -57,9 +57,9 @@ function find_motifs_fasta_folder(input_folder::String, output_folder::String)
         fasta_input = input_folder*"/"*fasta;
         output_loc = output_folder*"/"*fasta;
         find_motifs_fasta(fasta_input, output_loc);
-        CDLmotif.GC.gc(true);
-        CDLmotif.GC.gc(false);
-        CDLmotif.CUDA.reclaim()
+        GC.gc(true);
+        GC.gc(false);
+        CUDA.reclaim()
     end
 end
 
