@@ -64,6 +64,17 @@ The output folder will look something like this:
 Motifs that are discovered will be stored in the *transfac* format as count matrices (PWMs). A summary on the motif discovery results in documented in ```summary.html``` in each folder.
 
 # Software requirements:
+## Weblogo
+ This software currently requires installation of [Weblogo](http://weblogo.threeplusone.com/manual.html#download). Weblogo can be installed via the following command (with python installed beforehand):
+ ```bash
+ pip install weblogo
+ ```
+And you can check if you have weblogo installed by typing in your command line by the foloowing command:
+```bash
+weblogo -h
+```
+
+## MEME
 This software currently requires installation of [MEME](https://meme-suite.org/meme/doc/download.html) (We use MEME's utility function fasta-shuffle-letters to create a control dataset to calculate the significance of each discovered motif using fisher exact test). Once MEME is installed, make sure you add MEME's utilities path to your PATH environment. On Linux operating systems, this is done by adding the following line to your .bashrc:
 
 ```bash
