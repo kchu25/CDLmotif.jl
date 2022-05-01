@@ -44,9 +44,6 @@ The input folder will look like this:
     ├── ...
     └── fasta_K.fa
 
-```julia    
-
-```
 The output folder will look like this:
 
     output-folder
