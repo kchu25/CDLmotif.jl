@@ -22,7 +22,7 @@ find_motifs_fasta(<fasta-filepath>, <output-folder>)
 
 # Find motifs for multiple fasta files
 # <input-folder>: A string that's the input folder's absolute file path; 
-#                 the input folder contains multiple fasta files. The folder 
+#                 the input folder contains multiple fasta files. This folder 
 #                 *must* contain only fasta files.
 # <output-folder>: A string that's the output folder's absolute file path;
 #                  this output folder will contain multiple folders. Each 
