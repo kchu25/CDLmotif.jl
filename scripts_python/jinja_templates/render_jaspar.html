@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<meta charset="utf-8">
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v6.js"></script>
+<head>
+	<title></title>
+	<style>
+	table, td {
+		border-collapse: collapse;
+		margin: 15px 15px;
+		padding: 5px 5px;
+	}
+
+	thead,tfoot {
+	    background-color: #333;
+	    color: #fff;
+	}
+	
+	td:first-child {
+	  font-weight: bold;
+	  color: #808080;
+	}
+	</style>
+</head>
+
+<body>
+	<div style="display:flex;">
+		<div style="float:left; margin:10px">
+			{% for d in range(discovered|length) %}
+			<table>
+				<thead>
+					<tr>
+						<th colspan="100%">
+							Discovered motif
+						</th>
+					</tr>
+				</thead>
+			<tbody>			
+					<tr><td>Label</td>
+						{% for i in range(discovered[d]|length) %}
+						<td><center>D{{ d_indices[d][i] }}</center></td>
+						{% endfor %}
+					</tr>
+					<tr><td>Logos</td>
+
+						{% for i in range(discovered[d]|length) %}
+						<td><center><img id="d_logo_{{d_indices[d][i]}}" width="275" src="{{ discovered[d][i] }}.png"></center></td>
+						{% endfor %}
+					</tr>
+					<tr><td></td>
+						{% for i in range(discovered[d]|length) %}
+						<td><center id="d_orientation_{{d_indices[d][i]}}">Learned PWM</center></td>
+						{% endfor %}
+					</tr>
+					<tr><td></td>
+						{% for i in range(discovered[d]|length) %}
+						<td><center><button type="button" onclick="discovered_{{d_indices[d][i]}}_changeToRC()">Reverse complement</button></center></td>
+
+						<script type="text/javascript">					
+								function discovered_{{d_indices[d][i]}}_changeToRC() {
+									var image = document.getElementById("d_logo_{{d_indices[d][i]}}");
+									if (image.src.match("_c")) {
+						                image.src = "{{ discovered[d][i] }}.png";
+						            } else {
+						            	image.src = "{{ discovered[d][i] }}_c.png";
+						            }
+						            var orientation = document.getElementById("d_orientation_{{d_indices[d][i]}}");
+						            if (orientation.innerHTML === "Learned PWM"){
+						            	orientation.innerHTML = "Learned PWM's reverse-complement";
+						            } else {
+						            	orientation.innerHTML = "Learned PWM";
+						            }
+								}						 
+						</script>
+
+						{% endfor %}
+					</tr>
+				<!-- 	<tr><td>D-cover</td>
+						{% for i in range(discovered[d]|length) %}
+						<td><center><div id="cover_ratio_bar_plot{{ d_indices[d][i] }}"></center></div></td>
+						{% endfor %}
+					</tr> -->
+					<tr><td># sequences used</td>
+						{% for i in range(discovered[d]|length) %}
+						<td><center>{{ used_sequences[d_indices[d][i]-1] }}</center></td> <!--- used_sequences is 0-indexed --->
+						{% endfor %}
+					</tr>
+					<tr><td>relative distance</td>
+						{% for i in range(discovered[d]|length) %}
+						<td><img src="distance_D{{d_indices[d][i]}}.png"></td>
+						{% endfor %}
+					</tr>
+				</tbody>
+			</table>
+			{% endfor %}
+
+			<script type="text/javascript">
+
+			{% for d in range(d_indices|length) %}
+			{% for i in range(d_indices[d]|length) %}
+				// set the dimensions and margins of the graph
+				const margin{{d_indices[d][i]}} = {top: 25, right: 25, bottom: 25, left: 25},
+				    width{{d_indices[d][i]}} = 275 - margin{{d_indices[d][i]}}.left - margin{{d_indices[d][i]}}.right,
+				    height{{d_indices[d][i]}} = 100 - margin{{d_indices[d][i]}}.top - margin{{d_indices[d][i]}}.bottom;
+
+				// append the svg object to the body of the page
+				const svg{{d_indices[d][i]}} = d3.select("#cover_ratio_bar_plot{{d_indices[d][i]}}")
+				  .append("svg")
+				    .attr("width", width{{d_indices[d][i]}} + margin{{d_indices[d][i]}}.left + margin{{d_indices[d][i]}}.right)
+				    .attr("height", height{{d_indices[d][i]}} + margin{{d_indices[d][i]}}.top + margin{{d_indices[d][i]}}.bottom)
+				  .append("g")
+				    .attr("transform", `translate(${margin{{d_indices[d][i]}}.left}, ${margin{{d_indices[d][i]}}.top})`);
+
+				// Parse the Data
+				d3.csv("./ratio{{d_indices[d][i]}}.csv").then( function(data) {
+
+				  // Add X axis
+				  const x = d3.scaleLinear()
+				    .domain([0, 1])
+				    .range([ 0, width{{d_indices[d][i]}}]);
+				  svg{{d_indices[d][i]}}.append("g")
+				    .attr("transform", `translate(0, ${height{{d_indices[d][i]}}})`)
+				    .call(d3.axisBottom(x))
+				    .selectAll("text")
+				      .attr("transform", "translate(-10,0)rotate(-45)")
+				      .style("text-anchor", "end");
+
+				  // Y axis
+				  const y = d3.scaleBand()
+				    .range([ 0, height{{d_indices[d][i]}} ])
+				    .domain(data.map(d => d.target))
+				    .padding(.1);
+				  svg{{d_indices[d][i]}}.append("g")
+				    .call(d3.axisLeft(y))
+
+				  //Bars
+				  svg{{d_indices[d][i]}}.selectAll("myRect")
+				    .data(data)
+				    .join("rect")
+				    .attr("x", x(0) )
+				    .attr("y", d => y(d.target))
+				    .attr("width", d => x(d.cover_ratio))
+				    .attr("height", y.bandwidth())
+				    .attr("fill", "#69b3a2")
+				})
+			{% endfor %}
+			{% endfor %}
+			</script>
+		</div>
+		<div style="float:left">
+		
+		</div>
+	</div>
+
+	<!--- create the div where pair occurrence will take place --->
+	<!-- Add a slider -->
+		<div>
+			<div style="float:left; margin:10px", id="pair_occurence">
+			</div>
+			<div style="float:left; max-width:500px;">
+				<br><br><br><br><br><br>
+				Pair occurence:<br>
+				<ul>
+					<li>(Di,Dj) is the number of co-occuring motif where the number
+						of nucleotides in between them is specified by the number indicated on 
+						the slider below 
+					</li>
+					<li>(Di, Dj) also specifies the order of occurence of both motifs 						
+					</li>
+					<li>
+						For each setting, the pairs of motifs that have number of co-occurence 
+						lower is 30 is omitted
+					</li>
+					<li>
+						The "occurence" is set if a motif scores above the (highest) score threshold set by p-value=.005
+					</li>
+
+				</ul>
+				
+				<input type="range" name="mySlider" id=mySlider min="5" max="30" value="10" onchange="updateTextInput(this.value);"><br>
+				Number of co-occuring motifs if there are less than <output id="textInput" for="mySlider">10</output> nucleotides in between both motifs.
+			</div>
+			<script>
+				function updateTextInput(val) {
+          				document.getElementById('textInput').value=val; 
+        		}
+			</script>
+		</div>
+	
+
+
+	<script>
+
+		// set the dimensions and margins of the graph
+		const po_margin = {top: 20, right: 30, bottom: 40, left: 90},
+		    po_width = 700 - po_margin.left - po_margin.right,
+		    po_height = {{max_rows}}*20 - po_margin.top - po_margin.bottom;
+
+		// append the svg object to the body of the page
+		const po_svg = d3.select("#pair_occurence")
+			.append("svg")
+		    .attr("width", po_width + po_margin.left + po_margin.right)
+		    .attr("height", po_height + po_margin.top + po_margin.bottom)
+			.append("g")
+		    .attr("transform",
+		          "translate(" + po_margin.left + "," + po_margin.top + ")");
+
+		// Parse the data
+		d3.csv("./pair_occ_within_10.csv").then(function(data) {
+
+		// Add X axis
+		const x = d3.scaleLinear()
+		    .domain([0,  {{ max_occ_num }}])
+		    .range([ 0, po_width]);
+	    po_svg.append("g")
+		    .attr("transform", `translate(0, ${po_height})`)
+		    .call(d3.axisBottom(x))
+		    .selectAll("text")
+		    .attr("transform", "translate(-10,0)rotate(-45)")
+		    .style("text-anchor", "end");
+
+		
+		// Y axis
+		const y = d3.scaleBand()
+		    .range([ 0, po_height ])
+		    .domain(data.map(function(d) { return d.pair; }))
+		    .padding(.1);
+	    po_svg.append("g")
+		    .call(d3.axisLeft(y))
+
+		// Bars
+	    po_svg.selectAll("myRect")
+    	    .data(data)    	    
+    	    .join("rect")
+    	    .attr("x", x(0) )
+    	    .attr("y", function(d) { return y(d.pair); })
+    	    .attr("width", function(d) { return x(d.occur); })
+    	    .attr("height", y.bandwidth() )
+    	    .attr("fill", "#69b3a2")    	
+
+    	})
+
+		// A function that update the chart when slider is moved
+    	function update_chart(nuc_apart){
+    		d3.select("#pair_occurence").select("svg").remove();
+
+    		const po_svg = d3.select("#pair_occurence")
+			.append("svg")
+		    .attr("width", po_width + po_margin.left + po_margin.right)
+		    .attr("height", po_height + po_margin.top + po_margin.bottom)
+			.append("g")
+		    .attr("transform",
+		          "translate(" + po_margin.left + "," + po_margin.top + ")");
+
+    		// update the chart
+    		var bar_csv = "./pair_occ_within_";
+    		var fp = bar_csv.concat(nuc_apart.toString());
+			d3.csv(fp.concat(".csv")).then(function(data) {
+
+			// Add X axis
+			const x = d3.scaleLinear()
+			    .domain([0, {{ max_occ_num }}])
+			    .range([ 0, po_width]);
+		    po_svg.append("g")
+			    .attr("transform", `translate(0, ${po_height})`)
+			    .call(d3.axisBottom(x))
+			    .selectAll("text")
+			    .attr("transform", "translate(-10,0)rotate(-45)")
+			    .style("text-anchor", "end");
+
+			
+			// Y axis
+			const y = d3.scaleBand()
+			    .range([ 0, po_height ])
+			    .domain(data.map(function(d) { return d.pair; }))
+			    .padding(.1);
+		    po_svg.append("g")
+			    .call(d3.axisLeft(y))
+
+			// Bars
+		    po_svg.selectAll("myRect")
+	    	    .data(data)    	    
+	    	    .join("rect")
+	    	    .attr("x", x(0) )
+	    	    .attr("y", function(d) { return y(d.pair); })
+	    	    .attr("width", function(d) { return x(d.occur); })
+	    	    .attr("height", y.bandwidth() )
+	    	    .attr("fill", "#69b3a2")    	
+
+	    	})
+    	}
+
+    	  // Listen to the slider
+		  d3.select("#mySlider").on("change", function(d){
+		    selectedValue = this.value
+		    update_chart(selectedValue)
+		  })
+	</script>
+
+
+</body>
+
+</html>

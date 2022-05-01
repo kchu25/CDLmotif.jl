@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+
+<meta charset="utf-8">
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v6.js"></script>
+<head>
+	<title></title>
+	<style>
+	table, td {
+		border-collapse: collapse;
+		margin: 15px 15px;
+		padding: 5px 5px;
+	}
+	.top_row {
+	  font-weight: bold;
+	  color: #808080;
+	}
+
+	thead,tfoot {
+		font-weight: bold;
+	    background-color: #333;
+	    color:white;
+	}
+
+	.div_gt_info {
+    	background-color: #E2E2E2;
+    	margin:5px;
+    	padding:3px;
+    }
+	</style>
+	 <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3.0.0/es5/tex-mml-chtml.js">
+  </script>
+</head>
+
+<body>
+	<div style="display:flex;">
+		<div style="float:left; margin:10px">				
+		<table>
+			<thead>
+				<tr>
+					<th colspan="100%">
+						Ground truth motif
+					</th>
+				</tr>
+			</thead>
+			<tbody>			
+				<tr class="top_row"><td>Label</td><td>Logo</td><td>performance coefficient-g</td></tr>
+				{% for g in range(gts|length) %}
+					<tr>
+						<td>G{{ gts_indices[g] }}</td>
+						<td><img id="gt_logo_{{gts_indices[g]}}" width="165" src="{{ gts[g] }}.png"><br>
+							<button type="button" onclick="gt_{{gts_indices[g]}}_changeToRC()">Reverse complement</button>
+						</td>
+						<td><div id="gt_covered_by_{{ gts_indices[g] }}"></div></td>
+					</tr>
+
+					<script type="text/javascript">					
+						function gt_{{gts_indices[g]}}_changeToRC() {
+							var image = document.getElementById("gt_logo_{{ gts_indices[g] }}");
+							if (image.src.match("_c")) {
+				                image.src = "{{ gts[g] }}.png";
+				            } else{
+				            	image.src = "{{ gts[g] }}_c.png";
+				            }
+						}						 
+					</script>
+				{% endfor %}
+		
+			</tbody>
+		</table>
+		
+			<div class="div_gt_info" style="border:1px solid black; max-width: 550px">
+					<center><h4>Binding patterns:</h4>
+					<a href="data.fa">Example fasta file</a> &nbsp;&nbsp; <a href="data_w_answer.fa">Example fasta file with ground truth</a></center><br><br>
+						 The ground truth motif has {{ modes }} mode(s)
+					<ul>
+						{% for i in range(modes) %}
+						
+						<li>Mode {{i+1}} occurs with parts ({{ mode_strs[i] }}) with probability {{mixture_weights[i]}} in each sequence and half of the time occurs in the reverse-complement direction</li>
+						<ul>
+                            {% if mode_str_pairs[i]|length != 0 %}
+                                {% for j in range(mode_str_pairs[i]|length) %}
+                                    {% if gap_str_pairs[i]|length > 0 %}
+                                    <li> 
+                                        {{mode_str_pairs[i][j][0]}},{{mode_str_pairs[i][j][1]}} can be 0-{{gap_str_pairs[i][j]}} nucleotides apart from each other
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+						</ul>
+						{% endfor %}
+					</ul>
+					<br>
+					Motifs are sampled in each seqeunce with probability {{prob_perseq}}.
+					<br>
+					<center><h4>Performance coefficients:</h4></center>
+					Let \(G_i\) denote the set of base positions of the \(i\)th ground truth motif occured (including the reverse complement), and \(D_j\) be the set of base positions of the \(j\)th discoverd motif returned from the algorithm
+					<ul>
+					<li>The \(j\)th entry of <i>performance-coefficients-g</i> is defined as \(|G_i \cap D_j| / |G_i|\)</li>
+						<ul>
+							<li>This measures the extent of ground truth \(G_i\) is captured by \(D_j\)</li>
+							<li>The entry <i>NC</i> is the quantity \( |\bigcap_j (G_i \setminus D_j)| / |G_i|  \); 
+							this measures how much the ground truth \(G_i\) is not captured by any \(D_j\) </li>
+						</ul>
+					<li>The \(ith\) entry of <i>performance-coefficient-d</i> is defined as \(|G_i \cap D_j| / |D_j|\)</li>
+						<ul>
+							<li>This measures how capable the learned motif \(D_j\) can capture \(G_i\)</li>
+							<li>The entry <i>BG</i> is the quantity \( |D_j \cap B| / |D_j|  \) where \(B\) is the set of background base positions;
+								this measures how much \(D_j\) is from the background
+							</li>
+						</ul>
+					<li>The <i>performance-coefficient</i> is defined as $$ \frac{\sum_i \max_j |G_i \cap D_j| }{|\bigcup_i G_i\, \cup\, \bigcup_j D_j|}$$</li>
+					</ul>
+					<center><h4>Likelihood ratio scores:</h4></center>
+					Let \(P_j\) be the position frequency matrix estimated from the \(j\)th learned motif and \(N_j\) be the number of sequences used in the estimation of \(P_j\).
+					The <i>likelihood ratio score</i> of the \(j\)th learned motif of length \(L\) is 
+					$$ \sum_{n=1}^{N_j}\sum_{\ell=1}^L \sum_{\alpha} \unicode{x1D7D9}\left[s_n[\ell]=\alpha\right] \, P_j[\alpha,\ell]\, \ln \frac{P_j[\alpha,\ell]}{B[\alpha]}$$
+					where \(B[\alpha]\) is the background frequency of nucleotide \(\alpha\), \(s_n\) the \(n\)th substring used in estimating \(P_j\),
+					and \(\unicode{x1D7D9}[\cdot]\) is the indicator function. In this experiment, \(B[\alpha]=1/4,\,\forall \alpha\).
+			</div>
+		</div>
+		<div style="float:left; margin:10px"> 
+			
+			<table>
+				<thead>
+					<tr>
+						<th colspan="100%">
+							Found no motifs in this dataset
+						</th>
+					</tr>
+				</thead>
+			<tbody>	
+					<tr class="top_row">
+					{% for i in range(discovered[1]|length) %}
+						<td>Label</td><td>Logo</td><td>performance coefficient-d</td>	
+					{% endfor %}
+					</tr>			
+					{% for d in range(discovered|length) %}
+						<tr>
+						{% for i in range(discovered[d]|length) %}
+							<td>D{{ d_indices[d][i] }}</td>
+							<td><img id="d_logo_{{d_indices[d][i]}}" width="165" src="{{ discovered[d][i] }}.png"><br>
+								<div id="d_orientation_{{d_indices[d][i]}}">Learned PWM</div><br>
+								<button type="button" onclick="discovered_{{d_indices[d][i]}}_changeToRC()">Reverse complement</button>
+							</td>
+							<td><div id="cover_ratio_bar_plot{{ d_indices[d][i] }}"></div></td>
+							<script type="text/javascript">					
+									function discovered_{{d_indices[d][i]}}_changeToRC() {
+										var image = document.getElementById("d_logo_{{d_indices[d][i]}}");
+										if (image.src.match("_c")) {
+							                image.src = "{{ discovered[d][i] }}.png";
+							            } else {
+							            	image.src = "{{ discovered[d][i] }}_c.png";
+							            }
+							            var orientation = document.getElementById("d_orientation_{{d_indices[d][i]}}");
+							            if (orientation.innerHTML === "Learned PWM"){
+							            	orientation.innerHTML = "Learned PWM's reverse-complement";
+							            } else {
+							            	orientation.innerHTML = "Learned PWM";
+							            }
+									}						 
+							</script>	
+						{% endfor %}
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			
+			<center><br><br><div>
+				Performance-coefficient: <b>{{perf_coeff}}</b><br><br>
+				Likelihood ratio scores:
+				<div id="likelihood_ratio_score_table"></div>
+			</div></center>
+			<script type="text/javascript">
+				const l_margin = {top: 40, right: 40, bottom: 40, left: 40},
+				    l_width = 700 - l_margin.left - l_margin.right,
+				    l_height = 500 - l_margin.top - l_margin.bottom;
+
+				// append the svg object to the body of the page
+				const l_svg = d3.select("#likelihood_ratio_score_table")
+				  .append("svg")
+				    .attr("width",  l_width + l_margin.left + l_margin.right)
+				    .attr("height", l_height + l_margin.top + l_margin.bottom)
+				  .append("g")
+				    .attr("transform", `translate(${l_margin.left}, ${l_margin.top})`);
+
+			    d3.csv("./score_contributions.csv").then( function(data) {
+			    	// Add X axis
+				  const x = d3.scaleLinear()
+				    .domain([0, {{max_lr_score}}])
+				    .range([ 0, l_width]);
+				  l_svg.append("g")
+				    .attr("transform", `translate(0, ${l_height})`)
+				    .call(d3.axisBottom(x))
+				    .selectAll("text")
+				      .attr("transform", "translate(-10,0)rotate(-45)")
+				      .style("text-anchor", "end");
+
+				  // Y axis
+				  const y = d3.scaleBand()
+				    .range([ 0, l_height ])
+				    .domain(data.map(d => d.discovered))
+				    .padding(.1);
+				  l_svg.append("g")
+				    .call(d3.axisLeft(y))
+
+			       //Bars
+				  l_svg.selectAll("myRect")
+				    .data(data)
+				    .join("rect")
+				    .attr("x", x(0) )
+				    .attr("y", d => y(d.discovered))
+				    .attr("width", d => x(d.contribution))
+				    .attr("height", y.bandwidth())
+				    .attr("fill", "#69b3a2")	
+			    })
+			</script>
+
+		</div>
+	</div>
+	<!--- D3 stuff for ground truth motifs --->
+	<script type="text/javascript">	
+	{% for g in range(gts|length) %}	
+		
+				// set the dimensions and margins of the graph
+				const g_margin{{gts_indices[g]}} = {top: 25, right: 35, bottom: 25, left: 35},
+				    g_width{{gts_indices[g]}} = 275 - g_margin{{gts_indices[g]}}.left - g_margin{{gts_indices[g]}}.right,
+				    g_height{{gts_indices[g]}} = 165 - g_margin{{gts_indices[g]}}.top - g_margin{{gts_indices[g]}}.bottom;
+
+				// append the svg object to the body of the page
+				const g_svg{{gts_indices[g]}} = d3.select("#gt_covered_by_{{ gts_indices[g] }}")
+				  .append("svg")
+				    .attr("width", g_width{{gts_indices[g]}} + g_margin{{gts_indices[g]}}.left + g_margin{{gts_indices[g]}}.right)
+				    .attr("height", g_height{{gts_indices[g]}} + g_margin{{gts_indices[g]}}.top + g_margin{{gts_indices[g]}}.bottom)
+				  .append("g")
+				    .attr("transform", `translate(${g_margin{{gts_indices[g]}}.left}, ${g_margin{{gts_indices[g]}}.top})`);
+
+				// Parse the Data
+				d3.csv("./gt_covered_by_{{gts_indices[g]}}.csv").then( function(data) {
+
+				  // Add X axis
+				  const x = d3.scaleLinear()
+				    .domain([0, 1])
+				    .range([ 0, g_width{{gts_indices[g]}}]);
+				  g_svg{{gts_indices[g]}}.append("g")
+				    .attr("transform", `translate(0, ${g_height{{gts_indices[g]}}})`)
+				    .call(d3.axisBottom(x))
+				    .selectAll("text")
+				      .attr("transform", "translate(-10,0)rotate(-45)")
+				      .style("text-anchor", "end");
+
+				  // Y axis
+				  const y = d3.scaleBand()
+				    .range([ 0, g_height{{gts_indices[g]}} ])
+				    .domain(data.map(d => d.by))
+				    .padding(.1);
+				  g_svg{{gts_indices[g]}}.append("g")
+				    .call(d3.axisLeft(y))
+
+				  //Bars
+				  g_svg{{gts_indices[g]}}.selectAll("myRect")
+				    .data(data)
+				    .join("rect")
+				    .attr("x", x(0) )
+				    .attr("y", d => y(d.by))
+				    .attr("width", d => x(d.cover_ratio))
+				    .attr("height", y.bandwidth())
+				    .attr("fill", "#69b3a2")
+				})		
+		
+	{% endfor %}
+	</script>
+
+
+	<!--- D3 stuff for discovered motifs --->
+	<script type="text/javascript">
+
+	{% for d in range(d_indices|length) %}
+	{% for i in range(d_indices[d]|length) %}
+		// set the dimensions and margins of the graph
+		const margin{{d_indices[d][i]}} = {top: 25, right: 25, bottom: 25, left: 25},
+		    width{{d_indices[d][i]}} = 275 - margin{{d_indices[d][i]}}.left - margin{{d_indices[d][i]}}.right,
+		    height{{d_indices[d][i]}} = 125 - margin{{d_indices[d][i]}}.top - margin{{d_indices[d][i]}}.bottom;
+
+		// append the svg object to the body of the page
+		const svg{{d_indices[d][i]}} = d3.select("#cover_ratio_bar_plot{{d_indices[d][i]}}")
+		  .append("svg")
+		    .attr("width", width{{d_indices[d][i]}} + margin{{d_indices[d][i]}}.left + margin{{d_indices[d][i]}}.right)
+		    .attr("height", height{{d_indices[d][i]}} + margin{{d_indices[d][i]}}.top + margin{{d_indices[d][i]}}.bottom)
+		  .append("g")
+		    .attr("transform", `translate(${margin{{d_indices[d][i]}}.left}, ${margin{{d_indices[d][i]}}.top})`);
+
+		// Parse the Data
+		d3.csv("./ratio{{d_indices[d][i]}}.csv").then( function(data) {
+
+		  // Add X axis
+		  const x = d3.scaleLinear()
+		    .domain([0, 1])
+		    .range([ 0, width{{d_indices[d][i]}}]);
+		  svg{{d_indices[d][i]}}.append("g")
+		    .attr("transform", `translate(0, ${height{{d_indices[d][i]}}})`)
+		    .call(d3.axisBottom(x))
+		    .selectAll("text")
+		      .attr("transform", "translate(-10,0)rotate(-45)")
+		      .style("text-anchor", "end");
+
+		  // Y axis
+		  const y = d3.scaleBand()
+		    .range([ 0, height{{d_indices[d][i]}} ])
+		    .domain(data.map(d => d.target))
+		    .padding(.1);
+		  svg{{d_indices[d][i]}}.append("g")
+		    .call(d3.axisLeft(y))
+
+		  //Bars
+		  svg{{d_indices[d][i]}}.selectAll("myRect")
+		    .data(data)
+		    .join("rect")
+		    .attr("x", x(0) )
+		    .attr("y", d => y(d.target))
+		    .attr("width", d => x(d.cover_ratio))
+		    .attr("height", y.bandwidth())
+		    .attr("fill", "#69b3a2")
+		})
+	{% endfor %}
+	{% endfor %}
+	</script>
+
+
+</body>
+
+</html>
