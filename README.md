@@ -52,11 +52,16 @@ The output folder will look something like this:
     output-folder
     ├── <fasta_1>
     |   ├── logos
+    |   ├── ├── d1.transfac
+    |   ├── ├── d2.transfac
+    |   ├── ├── ...            
     |   └── summary.html
     ├── <fasta_2>
     ├── <fasta_3>
     ├── ...
     └── <fasta_K>
+
+Motifs that are discovered will be stored in the *transfac* format as count matrices (PWMs). A summary on the motif discovery results in documented in ```summary.html``` in each folder.
 
 # Software requirements:
 This software currently requires installation of [MEME](https://meme-suite.org/meme/doc/download.html) (We use MEME's utility function fasta-shuffle-letters to create a control dataset to calculate the significance of each discovered motif using fisher exact test). Once MEME is installed, make sure you add MEME's utilities path to your PATH environment. On Linux operating systems, this is done by adding the following line to your .bashrc:
