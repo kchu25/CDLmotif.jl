@@ -64,7 +64,7 @@ The output folder will look like this:
     └── fasta_K
 
 # Software requirements:
-This software currently requires installation of [MEME](https://meme-suite.org/meme/doc/download.html) (We use fasta-shuffle-letters to create a control dataset to calculate the significance of each discovered motif using fisher exact test). Once MEME is installed, make sure you add MEME's utilities path to your PATH environment. On Linux operating systems, this is done by adding the following line to your .bashrc:
+This software currently requires installation of [MEME](https://meme-suite.org/meme/doc/download.html) (We use MEME's utility function fasta-shuffle-letters to create a control dataset to calculate the significance of each discovered motif using fisher exact test). Once MEME is installed, make sure you add MEME's utilities path to your PATH environment. On Linux operating systems, this is done by adding the following line to your .bashrc:
 
 ```bash
 export PATH=<path to where MEME is installed>/meme/bin:$PATH
