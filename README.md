@@ -11,7 +11,7 @@
 This is a DNA-sequence-motif discovery method based on convolutional dictionary learning. More details on the implementations and derivations of the model are coming soon. 
 
 # Usage:
-In the Julia environment, import CDLmotif, and then use any of the two following subroutines:
+In Julia, import CDLmotif, and then use any of the two following subroutines:
 ```julia
 using CDLmotif
 
@@ -59,7 +59,7 @@ The output folder will look something like this:
     ├── ...
     └── <fasta_K>
 
-Motifs that are discovered will be stored in the *transfac* format as count matrices (for which it is straightforward to transform them into PWMs). A summary on the motif discovery results is documented in ```summary.html``` in each folder.
+Motifs that are discovered will be stored in the *transfac* format as count matrices (for which it is straightforward to transform them into PWMs). Note that ```d1.transfac``` corresponds to the first discovered motif, and ```d2.transfac``` correspond to the second discovered motif, and so on. A summary on the motif discovery results is documented in ```summary.html``` in each folder.
 
 # Software requirements:
 ### Weblogo
@@ -91,7 +91,7 @@ Please contact <skchu@wustl.edu> or raise an issue on the github repo with any q
 # Notes
 - We plan to drop the dependence on MEME's utilities soon.
 - Julia uses a just-in-time compiler, which means that software written in Julia needs to be pre-compiled before its execution. We hope to remove this soon so that we don't have to wait every time on pre-compilations before we actually run the subroutines. This makes the application more easily integrated into the bioinformatics pipeline (e.g., snakemake; see point below).
-- We plan to extend this software to a standalone application so that the Julia language will no longer be required. This can be done from packages like [PackageCompiler.jl](https://github.com/JuliaLang/PackageCompiler.jl/). However, there's currently a bug related to [packages that depend on LLVM.jl](https://github.com/JuliaLang/PackageCompiler.jl/issues/682) that prevents this from being realized. We may implement a c++ version of this software if the LLVM-dependency issue is not resolved soon.
+- We plan to extend this software to a standalone application so that the Julia language will no longer be required. This can be done with packages like [PackageCompiler.jl](https://github.com/JuliaLang/PackageCompiler.jl/). However, there's currently a bug related to [packages that depend on LLVM.jl](https://github.com/JuliaLang/PackageCompiler.jl/issues/682) that prevents this from being realized. We may implement a c++ version of this software if the LLVM-dependency issue is not resolved soon.
 - Currently, we rank the motifs on the result page via the sum of likelihood ratio scores. We will add the motif significance for each discovered motif soon.
 - More documentation and extensions on optional inputs on adjusting the hyperparameters are coming soon.
 
