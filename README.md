@@ -61,6 +61,12 @@ The output folder will look something like this:
 
 Motifs that are discovered will be stored in the *transfac* format as count matrices (for which it is straightforward to transform them into PWMs). Note that ```d1.transfac``` corresponds to the first discovered motif, and ```d2.transfac``` correspond to the second discovered motif, and so on. A summary on the motif discovery results is documented in ```summary.html``` in each folder.
 
+# Data requirements:
+
+### Fasta
+We require the input data to be in fasta format. Currently, we only support fasta files that contain all sequence that have equal lengths (equal number of nucleotides in each sequence). 
+
+
 # Software requirements:
 ### Weblogo
  This software currently requires the installation of [Weblogo](http://weblogo.threeplusone.com/manual.html#download). You can install Weblogo via the following command (with python3 installed beforehand):
