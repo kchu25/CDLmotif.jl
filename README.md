@@ -64,7 +64,7 @@ Motifs that are discovered will be stored in the *transfac* format as count matr
 # Data requirements:
 
 ### Fasta
-We require the input data to be in fasta format. Currently, we only support fasta files that contain all sequence that have equal lengths (equal number of nucleotides in each sequence). 
+We require the input data to be in [fasta format](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=BlastHelp). Currently, we only support fasta files that contain all sequence that have equal lengths (equal number of nucleotides in each sequence). 
 
 
 # Software requirements:
