@@ -36,7 +36,7 @@ Please check below for a quick reference on the usage and software/hardware requ
 
 # Find motifs for multiple fasta files
 
-The input folder should look something like this:
+The input folder should have the following structure:
 
     input-folder
     ├── <fasta_1>.fa
@@ -45,7 +45,7 @@ The input folder should look something like this:
     ├── ...
     └── <fasta_K>.fa
 
-The output folder will look something like this:
+The output folder will have the following structure:
 
     output-folder
     ├── <fasta_1>
