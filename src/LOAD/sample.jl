@@ -88,9 +88,9 @@ end
 # sample_m(b)
 # ------------------------------------------
 
-"""
+#=
 Sample the ith mode of the motif, a mixture_p_fam_motifs
-"""
+=#
 function sample_m(m::mixture_k_parts_motifs)::String
     i = rand(m.mixture_weights);
     sample_contiguous_subset(m.motif, m.modes[i]); 
