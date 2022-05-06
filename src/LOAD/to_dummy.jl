@@ -22,10 +22,10 @@ function data_2_dummy(dna_sim_data_vec::Vector{sim_dna_str_w_motif}; F=Float32)
     return S
 end
 
-"""
+#=
 get the set of dummy-vectors from a set of dna-strings
 the dummy-vectors are all of same length (for now)
-"""
+=#
 function data_2_dummy(dna_strings::Vector{String}; F=Float32)
     how_many_strings = length(dna_strings);
     @assert how_many_strings != 0 "There aren't DNA strings found in the input";

@@ -24,30 +24,6 @@ function save_gt_motifs(target_folder::String, motif::single_part_motif)
     CSV.write(target_folder*"/pfm_gt1.csv",  Tables.table(gt), writeheader=false);
 end
 
-# _m_ = single_part_motif(12);
-# motif=_m_;
-# gt = reduce(hcat, [motif.P.pc[i].p for i = 1:length(motif.P.pc)]);
-# gt = reduce(hcat, [motif.P.pc[i].p for i = 5:11]);
-# q = (floor.(gt .* 10000));
-# q = (floor.(gt .* 10000)).+900;
-# io = open(target_folder*"/pfm_gt123.csv", "w")
-# # println(io, "ID\t")
-# # println(io, "XX\t")
-# # println(io, "BF\t")
-# # println(io, "XX\t")
-# println(io, "P0\tA\tC\tG\tT")
-# for i = 1:size(q,2)
-#     if i < 10
-#         println(io, "0"*"$i\t$(q[1,i])\t$(q[2,i])\t$(q[3,i])\t$(q[4,i])")
-#     else
-#         println(io, "1"*"$i\t$(q[1,i])\t$(q[2,i])\t$(q[3,i])\t$(q[4,i])")
-#     end
-# end
-# println(io, "XX\t")
-# close(io)
-
-
-
 function save_sim_data_as_fasta(target_folder::String, 
                                 raw_data, 
                                 N::Integer,

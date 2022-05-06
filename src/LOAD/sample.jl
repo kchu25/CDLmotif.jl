@@ -30,10 +30,10 @@ end
 
 sample_whole(m::gapped_k_parts_motif) = (motif=sample_m(m), mode=1);
 
-"""
+#=
 sample a (contiguous) subset of gapped_p_fam_k_motif_PC 
 according to a unitrange r
-"""
+=#
 
 function sample_contiguous_subset(m::gapped_k_parts_motif, r::UnitRange{Int})::String
     r_max = maximum(r); r_min = minimum(r);

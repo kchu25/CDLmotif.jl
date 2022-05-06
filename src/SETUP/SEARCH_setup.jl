@@ -1,8 +1,8 @@
-"""
+#=
 A record data structure for each dna sequence in the dataset
     T1: whatever Int type
     T2: smaller Int type to save space; e.g. Int16, Int32    
-"""
+=#
 mutable struct activation_record{T <: Integer,                             
                                  S <: Real}    
     K::T # number of filters to be recorded
@@ -56,7 +56,7 @@ mutable struct activation_record{T <: Integer,
     end
 end
 
-"""
+#=
 struct for inferring the topology of the activations
     construction:
         K: total number of filters (from all of the trainings)
@@ -69,7 +69,7 @@ Note: 1. I am using "topology" in the loose sense here
       2. T should be Int16 or Int32 since 
                 - K: total number of filters is typically less than 100
                 - Use Int16 if overlap/non_overlap/next_to count is less than 32,768 
-"""
+=#
 mutable struct activations_topology{T<: Integer}
     K::T                           # number of filters recorded
     overlap::CuArray{T, 3}
