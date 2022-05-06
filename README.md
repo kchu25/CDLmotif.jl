@@ -59,7 +59,7 @@ The output folder will have the following structure:
     ├── ...
     └── <fasta_K>
 
-Motifs that are discovered will be stored in the *[transfac](https://meme-suite.org/meme/doc/transfac-format.html)* format as count matrices (for which it is one can transform them into [PWMs](https://en.wikipedia.org/wiki/Position_weight_matrix)). Note that ```d1.transfac``` corresponds to the first discovered motif, and ```d2.transfac``` correspond to the second discovered motif, and so on. A summary on the motif discovery results is documented in ```summary.html``` in each folder.
+Motifs that are discovered will be stored in the *[transfac](https://meme-suite.org/meme/doc/transfac-format.html)* format as count matrices (for which one can transform them into [PWMs](https://en.wikipedia.org/wiki/Position_weight_matrix)). Note that ```d1.transfac``` corresponds to the first discovered motif, and ```d2.transfac``` correspond to the second discovered motif, and so on. A summary on the motif discovery results is documented in ```summary.html``` in each folder.
 
 # Data requirements:
 
