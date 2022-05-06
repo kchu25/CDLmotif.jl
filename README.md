@@ -8,7 +8,7 @@
 
 # Introduction
 
-This is a DNA-sequence-motif discovery method based on convolutional dictionary learning. More details on the implementations and derivations of the model are coming soon. 
+This is a [DNA-sequence-motif](https://en.wikipedia.org/wiki/Sequence_motif) discovery method based on convolutional dictionary learning. More details on the implementations and derivations of the model are coming soon. 
 
 # Usage:
 In Julia, import CDLmotif, and then use any of the two following subroutines:
@@ -59,12 +59,13 @@ The output folder will have the following structure:
     ├── ...
     └── <fasta_K>
 
-Motifs that are discovered will be stored in the *[transfac](https://meme-suite.org/meme/doc/transfac-format.html)* format as count matrices (for which one can transform them into [PWMs](https://en.wikipedia.org/wiki/Position_weight_matrix)). Note that ```d1.transfac``` corresponds to the first discovered motif, and ```d2.transfac``` correspond to the second discovered motif, and so on. A summary on the motif discovery results is documented in ```summary.html``` in each folder.
+Motifs that are discovered will be stored in the *[transfac](https://meme-suite.org/meme/doc/transfac-format.html)* format as count matrices (for which one can transform them into [PWMs](https://en.wikipedia.org/wiki/Position_weight_matrix)). Note that ```d1.transfac``` corresponds to the first discovered motif, and ```d2.transfac``` corresponds to the second discovered motif, and so on. A summary on the motif discovery results is documented in ```summary.html``` in each folder.
 
 # Data requirements:
 
 ### Fasta
-We require the input data to be in [fasta format](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=BlastHelp). Currently, we only support fasta files that contain all sequence that have equal lengths (equal number of nucleotides in each sequence). 
+We require the input data to be in the [fasta format](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=BlastHelp).  Currently, we only support fasta files containing all sequences with equal lengths (equal number of nucleotides in each sequence).
+
 
 
 # Software requirements:
@@ -79,7 +80,7 @@ weblogo -h
 ```
 
 ### MEME
-This software currently requires the installation of [MEME](https://meme-suite.org/meme/doc/download.html) (We use MEME's utility function fasta-shuffle-letters to create a control dataset to calculate the significance of each discovered motif using fisher exact test). Once MEME is installed, make sure you add MEME's utilities path to your PATH environment variable. On Linux operating systems, you can do so by adding the following line to your .bashrc:
+This software currently requires the installation of [MEME](https://meme-suite.org/meme/doc/download.html) (We use MEME's utility function fasta-shuffle-letters to create a control dataset to calculate the significance of each discovered motif using fisher exact test). Once MEME is installed, add MEME's utilities path to your PATH environment variable. On Linux operating systems, you can do so by adding the following line to your .bashrc:
 
 ```bash
 export PATH=<path to where MEME is installed>/meme/bin:$PATH
@@ -92,7 +93,7 @@ export PATH=<path to where MEME is installed>/meme/bin:$PATH
 More details on this later.
 
 # Contact
-Please contact <skchu@wustl.edu> or raise an issue on the github repo with any questions about installation or usage.
+Please contact <skchu@wustl.edu> or raise an issue on the Github repo with any questions about installation or usage.
 
 # Notes
 - Julia uses a just-in-time compiler, which means that software written in Julia needs to be pre-compiled before its execution. We hope to remove this soon so that we don't have to wait every time on pre-compilations before we actually run the subroutines. This makes the application more easily integrated into the bioinformatics pipeline (e.g., snakemake; see point below).
@@ -100,7 +101,7 @@ Please contact <skchu@wustl.edu> or raise an issue on the github repo with any q
 - Currently, we rank the motifs on the result page via the sum of likelihood ratio scores. We will add the motif significance for each discovered motif soon.
 - More documentation and extensions on optional inputs on adjusting the hyperparameters are coming soon.
 - We plan to drop the dependence on MEME's utility subroutine fasta-shuffle-letters in the future.
-- We have not added this package to the Julia registry yet. To use this software, one way to do so is to simply clone it, and enter the following in your julia code
+- We have not added this package to the Julia registry yet. To use this software, one way to do so is to simply clone it, and enter the following in your Julia code
 ```julia
 push!(LOAD_PATH, <path to the folder that contains CDLmotif.jl>)    
 ```
