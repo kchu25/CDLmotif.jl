@@ -10,7 +10,13 @@
 
 This is a [DNA-sequence-motif](https://en.wikipedia.org/wiki/Sequence_motif) discovery method based on convolutional dictionary learning. More details on the implementations and derivations of the model are coming soon. 
 
-# Usage:
+# Installation
+To install CDLmotif.jl use Julia's package manager:
+```
+pkg> add CDLmotif
+```
+
+# Usage
 In Julia, import CDLmotif, and then use any of the two following subroutines:
 ```julia
 using CDLmotif
@@ -61,14 +67,14 @@ The output folder will have the following structure:
 
 Motifs that are discovered will be stored in the *[transfac](https://meme-suite.org/meme/doc/transfac-format.html)* format as count matrices (for which one can transform them into [PWMs](https://en.wikipedia.org/wiki/Position_weight_matrix)). Note that ```d1.transfac``` corresponds to the first discovered motif, and ```d2.transfac``` corresponds to the second discovered motif, and so on. A summary on the motif discovery results is documented in ```summary.html``` in each folder.
 
-# Data requirements:
+# Data requirements
 
 ### Fasta
 We require the input data to be in the [fasta format](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=BlastHelp).  Currently, we only support fasta files containing all sequences with equal lengths (equal number of nucleotides in each sequence).
 
 
 
-# Software requirements:
+# Software requirements
 ### Weblogo
  This software currently requires the installation of [Weblogo](http://weblogo.threeplusone.com/manual.html#download). You can install Weblogo via the following command (with python3 installed beforehand):
  ```bash
@@ -86,7 +92,7 @@ This software currently requires the installation of [MEME](https://meme-suite.o
 export PATH=<path to where MEME is installed>/meme/bin:$PATH
 ```
 
-# Hardware requirements:
+# Hardware requirements
  We require the user to have an Nvidia GPU as we currently use [CUDA.jl](https://github.com/JuliaGPU/CUDA.jl/) to speed up the optimization for convolutional dictionary learning.
 
 # Cite
@@ -101,11 +107,11 @@ Please contact <skchu@wustl.edu> or raise an issue on the Github repo with any q
 - Currently, we rank the motifs on the result page via the sum of likelihood ratio scores. We will add the motif significance for each discovered motif soon.
 - More documentation and extensions on optional inputs on adjusting the hyperparameters are coming soon.
 - We plan to drop the dependence on MEME's utility subroutine fasta-shuffle-letters in the future.
-- We have not added this package to the Julia registry yet. To use this software, one way to do so is to simply clone it, and enter the following in your Julia code
+<!-- - We have not added this package to the Julia registry yet. To use this software, one way to do so is to simply clone it, and enter the following in your Julia code
 ```julia
 push!(LOAD_PATH, <path to the folder that contains CDLmotif.jl>)    
 ```
 before you type 
 ```
 using CDLmotif
-```
+``` -->
