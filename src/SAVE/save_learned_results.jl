@@ -224,18 +224,20 @@ function save_result_fasta(g::Union{good_stuff, Nothing}, target_folder::String)
     if !isnothing(g)
         !isdir(target_folder) && (mkdir(target_folder);)
         !isdir(logo_folder) && (mkdir(logo_folder);)
-        ###### save msa file for each pwm ################        
+        ###### save msa file for each pwm ################    
+        evalues = filter_using_evalue!(g; cpu=true, non_overlap=true, get_evalues_only=true);    
+
+        sort_perm = sortperm(evalues); # sort it according to e-values (small to big)        
+        evalues = round.(evalues[sort_perm], sigdigits=3);
         scores = [round(sum(values(g.ms.scores[i])),digits=1)
-                    for i = 1:g.ms.num_motifs]; # scores of each discovered motifs
-        sort_perm = sortperm(scores, rev=true); # sort it according to the sum of LRS
-        scores =  scores[sort_perm];
+                    for i = 1:g.ms.num_motifs][sort_perm]; # scores of each discovered motifs
         msa_counts = [length(g.ms.positions[j]) for j = 1:g.ms.num_motifs][sort_perm];
         labels = ["D$j" for j = 1:g.ms.num_motifs];
         logos = ["d$(j)" for j = 1:g.ms.num_motifs];
-
+            
         save_pfms_as_transfac(logo_folder, g, sort_perm);
 
-        df = DataFrame(label=labels, count=msa_counts, slrs=scores, logo=logos)
+        df = DataFrame(label=labels, count=msa_counts, slrs=scores, eval=evalues, logo=logos)
         out = render(html_template, target_folder=target_folder, logo_folder=logo_folder_name, num_seq=g.data.N, DF=df);
         ###### html stuff #########################            
         io = open(target_folder*"/summary.html", "w")

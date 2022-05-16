@@ -22,6 +22,7 @@ end
 
 function overlapping_scan_bg!(g::good_stuff{T,S,Q}) where {T,S,Q}
     p = [Dict{T,T}() for _ = 1:g.ms.num_motifs];
+    s = [Dict{T,S}() for _ = 1:g.ms.num_motifs];
     for k = 1:g.ms.num_motifs   
         pwm_comp = pwm_complement(g.ms.pwms[k]);      
         for n = 1:size(g.data.data_matrix_bg,2)
@@ -35,13 +36,54 @@ function overlapping_scan_bg!(g::good_stuff{T,S,Q}) where {T,S,Q}
                                     g.ms.lens[k], 
                                     g.data.L);
             if score ≥ score_c
-                score > g.ms.thresh[k] && (p[k][n] = argmax_;)
+                score > g.ms.thresh[k] && (s[k][n] = score; p[k][n] = argmax_;)
             else
-                score_c > g.ms.thresh[k] && (p[k][n] = argmax_c;)
+                score_c > g.ms.thresh[k] && (s[k][n] = score_c; p[k][n] = argmax_c;)
             end
         end
     end
-    return p
+    return p, s
+end
+
+function non_overlapping_scan_bg!(g::good_stuff{T,S,Q}, positions, scores) where {T,S,Q}
+    @inbounds for n = 1:g.data.N
+        spans_pos = T[]; 
+        spans_len = T[];
+
+        indices_to_keep = Dict(i=>false for i = 1:g.ms.num_motifs);
+        scores_n = [haskey(scores[i], n) ? scores[i][n] : 0 for i = 1:g.ms.num_motifs];
+        positions_ = [haskey(positions[i], n) ? positions[i][n] : 0 for i = 1:g.ms.num_motifs];   
+        max_score_ind = argmax(scores_n);
+
+        while scores_n[max_score_ind] != 0
+            intersect_ = false;
+            for (p,l) in zip(spans_pos,spans_len)
+                # check whether this "segment" that achieves 
+                # the best score intersect with any other "segments"
+                p_end = p+l-1;
+                p_max = positions_[max_score_ind];
+                p_max_end = p_max+g.ms.lens[max_score_ind]-1;
+                if p ≤ p_max ≤ p_end || p ≤ p_max_end ≤ p_end || p_max ≤ p ≤ p_max_end || p_max ≤ p_end ≤ p_max_end
+                    intersect_ = true;
+                end
+            end
+            if !intersect_
+                indices_to_keep[max_score_ind] = true;
+                push!(spans_pos, positions_[max_score_ind]);
+                push!(spans_len, g.ms.lens[max_score_ind]);
+            end
+            scores_n[max_score_ind] = 0;
+            max_score_ind = argmax(scores_n);
+        end
+        for j = 1:g.ms.num_motifs         
+            if !indices_to_keep[j] && haskey(positions[j], n)
+                delete!(positions[j], n); 
+                delete!(scores[j], n); 
+                # so that the set of sequences covered by pwms are disjoint
+            end
+        end
+    end
+    return positions, scores
 end
 
 function overlapping_scan!(g::good_stuff{T,S,Q},

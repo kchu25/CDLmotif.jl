@@ -47,12 +47,10 @@ function find_motif(g::good_stuff)
 
     avail_bytes, total_bytes = Mem.info();
     if avail_bytes/total_bytes < 0.5 
-        # println("clean up gpu mem");        
-        # CUDA.memory_status()
         GC.gc(); GC.gc(true); GC.gc(false); CUDA.reclaim(); 
         GC.gc(); GC.gc(true); GC.gc(false); CUDA.reclaim();
     end
-
+    
     @time get_pair_pfms!(at, ar, g);    
     
     @time for _ = 1:g.search.default_max_iter
@@ -78,9 +76,7 @@ function find_motif(g::good_stuff)
                         update_positions=false);
     end
 
-    # length(g.ms.pfms)
-    # g.ms.lens
-    # length.(g.ms.positions)
+    # set up a higher ic threshold as most extensions is done beforehand
     g.search.ic_extension_thresh=0.6;
 
     @time begin 
@@ -105,7 +101,7 @@ function find_motif(g::good_stuff)
 
     @time begin
         last_ssc = Inf; cur_ssc = nothing;
-        filter_using_evalue!(g,cpu=true);
+        filter_using_evalue!(g; cpu=true, non_overlap=true);
         allr_merge!(g)
         rid_of_len_less_than_six!(g)
         for _ = 1:g.search.max_score_iter

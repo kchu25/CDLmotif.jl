@@ -1,7 +1,11 @@
-function filter_using_evalue!(g::good_stuff; cpu=false)
-    
+function filter_using_evalue!(g::good_stuff; cpu=false, non_overlap=false, get_evalues_only=false)
     if cpu 
-        bg_pos = overlapping_scan_bg!(g);
+        if non_overlap
+            bg_pos, bg_score = overlapping_scan_bg!(g);
+            bg_pos, _ = non_overlapping_scan_bg!(g, bg_pos, bg_score);
+        else
+            bg_pos, _ = overlapping_scan_bg!(g);
+        end
     else
         bg_dat_gpu = cu(g.data.data_matrix_bg);        
         bg_pos = scan_w_gpu!(g, bg_dat_gpu; scan_bg=true);
@@ -19,7 +23,11 @@ function filter_using_evalue!(g::good_stuff; cpu=false)
         evalues[i] = HypothesisTests.pvalue(q)*g.ms.num_motifs;
     end    
     
-    evalue_filtering!(g, evalues, cpu);    
+    if get_evalues_only
+        return evalues
+    else
+        evalue_filtering!(g, evalues, cpu);    
+    end
 end
 
 function evalue_filtering!(g::good_stuff, evalues::Vector{T}, cpu::Bool) where T <: Real

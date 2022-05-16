@@ -63,7 +63,7 @@ const html_template=mt"""<!DOCTYPE html>
 			<tbody>	
 					Number of input sequences: {{:num_seq}}
 					<tr class="top_row">
-						<td>Label</td><td>count</td><td>sum-LRS</td><td>Logo</td>
+						<td>Label</td><td>count</td><td>sum-LRS</td><td>e-value</td><td>Logo</td>
 					</tr>		
 
                     {{#:DF}}
@@ -71,6 +71,7 @@ const html_template=mt"""<!DOCTYPE html>
                         <td>{{:label}}</td>
                         <td>{{:count}}</td>
                         <td>{{:slrs}}</td>
+                        <td>{{:eval}}</td>
                         <td><img id="d_logo_{{:label}}" width="165" src="{{:logo_folder}}/{{:logo}}.png"><br>
                             <div id="d_orientation_{{:label}}">Learned PWM</div><br>
 							<button type="button" onclick="discovered_{{:label}}_changeToRC()">Reverse complement</button>
