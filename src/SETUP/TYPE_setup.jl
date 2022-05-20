@@ -30,10 +30,10 @@ const num_seq = 800;
 const num_expr_each = 1;
 
 # dummy reference # might change the type later for more flexibility
-const dummy = Dict('A'=>Array{Float32}([1, 0, 0, 0]), 
-                   'C'=>Array{Float32}([0, 1, 0, 0]),
-                   'G'=>Array{Float32}([0, 0, 1, 0]), 
-                   'T'=>Array{Float32}([0, 0, 0, 1]));
+const dummy = Dict('A'=>Array{dat_t}([1, 0, 0, 0]), 
+                   'C'=>Array{dat_t}([0, 1, 0, 0]),
+                   'G'=>Array{dat_t}([0, 0, 1, 0]), 
+                   'T'=>Array{dat_t}([0, 0, 0, 1]));
 
 ################################################
 
