@@ -29,7 +29,7 @@ const u_conc = Union{Float64, v_f64, Nothing};
 const num_seq = 800;
 const num_expr_each = 1;
 
-# dummy reference
+# dummy reference # might change the type later for more flexibility
 const dummy = Dict('A'=>Array{Float32}([1, 0, 0, 0]), 
                    'C'=>Array{Float32}([0, 1, 0, 0]),
                    'G'=>Array{Float32}([0, 0, 1, 0]), 

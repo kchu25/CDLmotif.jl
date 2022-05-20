@@ -3,7 +3,10 @@ module CDLmotif
 using CUDA, FFTW, LinearAlgebra, Random, 
       DoubleFloats, JLD2, DataStructures, 
       HypothesisTests, Distributions, CSV, 
-      DataFrames, ArgParse, Mustache
+      DataFrames, ArgParse, Mustache, StatsBase,
+      Gadfly, Cairo
+
+
 
 import Base.view
 
