@@ -17,7 +17,6 @@ function filter_using_evalue!(g::good_stuff; cpu=false, non_overlap=false, get_e
     evalues = fill(0.0, g.ms.num_motifs);    
 
     @inbounds for i = 1:g.ms.num_motifs
-        # multiplier = g.data.L-g.ms.lens[i]+1;
         a = len_positions[i]; b = len_positions_bg[i];
         q = FisherExactTest(promote_i(a, g.data.N, b, g.data.N)...);     
         evalues[i] = HypothesisTests.pvalue(q)*g.ms.num_motifs;

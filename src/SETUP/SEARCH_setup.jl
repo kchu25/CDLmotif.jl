@@ -96,8 +96,6 @@ mutable struct motifs{T <: Integer, S <: Real}
     positions::Union{Nothing, Vector{Dict{T, T}}}
     scores::Union{Nothing, Vector{Dict{T, S}}}
     use_comp::Union{Nothing, Vector{Dict{T, Bool}}}
-    # to_be_removed::Union{Nothing, Dict{T, Bool}}    
-    # orig_len::Vector{T}
 end
 
 findparam_int(ms::motifs{T,S}) where {T,S} = T;
