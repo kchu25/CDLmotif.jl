@@ -569,22 +569,3 @@ function get_perform_coeff_test(ms,
 
     return round(performance_coeff, digits=digits), gt_cover_ratio, fp_ratio, gt_n_cover, a_cover
 end
-
-
-
-
-# function get_perform_coeff_u(ms,
-#     motif::Union{single_part_motif, 
-#                 mixture_k_parts_motifs, 
-#                 gapped_k_parts_motif, mixture_gapped_k_parts_motifs},
-#     data::Simulated_DNA_Dataset;
-#     digits=3
-#     )
-#     gt = get_gt(motif, data);
-#     gt_area, gt_area_each, bg_area, activated_f_area, activated_f_individial, gt_overlaps, bg_overlaps = get_overlaps(gt, ms, data);    
-    
-#     performance_coeff = sum(gt_overlaps) / 
-#                     (gt_area+activated_f_area-sum(gt_overlaps));
-#     return round(performance_coeff, digits=digits)
-# end
-

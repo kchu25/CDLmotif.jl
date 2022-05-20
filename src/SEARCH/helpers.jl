@@ -12,8 +12,6 @@ maximum_apart_length(ar::activation_record) = ar.C - minimum_filter_length(ar) -
 pfm2pwm(pfm) = log2.(pfm ./ .25);
 pfm2pwm(pfm, bg) = log2.(pfm ./ bg);
 
-# pfm_complement(pfm::Matrix{T}) where T <: Real = reduce(hcat,[reverse(pfm[:,i]) for i = size(pfm,2):-1:1]);
-
 pfm_complement(pfm::Matrix{T}) where T <: Real = reverse(pfm);
 pwm_complement(pwm::Matrix{T}) where T <: Real = reverse(pwm);
 
@@ -116,29 +114,6 @@ function get_msa_init(pos_dict_singleton::Dict{T, T}, len_::Integer,
     msa
 end
 
-# function get_msa_init(msa::Union{Nothing,Matrix{S}}, 
-#                       pos_dict_singleton::Dict{T, T}, 
-#                       len_::Integer, data_matrix::Matrix{S}
-#                       ) where {S, T}
-#     msa = isnothing(msa) ? zeros(S, (4*len_,0)) : msa; 
-#     @assert size(msa, 1) == 4*len_ "size of msa matrix must agree"
-#     @inbounds for k in keys(pos_dict_singleton)      
-#         s = (pos_dict_singleton[k]-1)*4+1;
-#         end_ = s+len_*4-1;
-#         msa = hcat(msa, data_matrix[s:end_,k]);
-#     end
-#     return msa
-# end
-
-
-# function get_pfm_colwise(msa::Matrix{T}, pseudo_count=1)  where T <: Real
-#     pfm_vec = (sum(msa, dims=2) .+ pseudo_count);
-#     count_mat = reshape(pfm_vec , (4, Int(size(msa,1)/4)));
-#     pfm = count_mat ./ sum(count_mat, dims=1);
-#     @assert all(sum(pfm, dims=1) .≈ 1.0) "pfm column need to sum to 1 "
-#     return pfm
-# end
-
 function get_pfm_colwise(msa::Matrix{T}, pseudo_count_r)  where T <: Real
     pfm_vec = sum(msa, dims=2);
     count_mat = reshape(pfm_vec , (4, Int(size(msa,1)/4)));
@@ -172,43 +147,6 @@ function get_information_content(pfm::Matrix{T}) where T <: Real
     ic_col = get_ic_col(pfm);
     return sum(ic_col), ic_col
 end
-
-# function get_complement(ms::motifs)
-#     new_pfms = [pfm for pfm in ms.pfms];    
-#     new_pfms_c = [pfm_complement(pfm) for pfm in ms.pfms];
-#     orig_lens = ms.orig_len;
-#     append!(orig_lens, ms.orig_len);
-#     append!(new_pfms, new_pfms_c);
-#     motifs([pfm for pfm in new_pfms], 
-#             [size(pfm,2) for pfm in new_pfms], 
-#             length(new_pfms), 
-#             nothing,
-#             nothing,
-#             Dict{findparams_tbrm_key(ms),Bool}(k=>false for k = 1:length(new_pfms)),
-#             orig_lens);
-# end
-
-# function copy_motifs(ms::motifs)
-#     motifs([pfm for pfm in ms.pfms], 
-#         [size(pfm,2) for pfm in ms.pfms], 
-#         length(ms.pfms), 
-#         nothing,
-#         nothing,
-#         Dict{Int16,Bool}(k=>false for k = 1:length(ms.pfms)),
-#         ms.orig_len); 
-# end
-
-# function rid_of_empty_motifs!(ms::motifs)    
-#     len_pfms = length(ms.pfms);
-#     keep = [i for i = 1:len_pfms if !isempty(ms.positions[i])]
-#     return motifs([ms.pfms[i] for i in keep], 
-#                    [ms.lens[i] for i in keep], 
-#                    length(keep), 
-#                    [ms.positions[i] for i in keep],
-#                    [ms.scores[i] for i in keep],
-#                    Dict{findparams_tbrm_key(ms),Bool}(k=>false for k = 1:length(keep)),
-#                    [ms.orig_len[i] for i in keep]); 
-# end
 
 function scores_reevaluation(new_pfms, 
                              new_lens, 

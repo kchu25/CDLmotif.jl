@@ -113,51 +113,6 @@ function get_pair_pfms!(at::activations_topology,
         );
 end
 
-
-# function first_scan_pfms_return_motifs(all_pfms, span_lens, pval_thresh, N, L, data_dat_gpu)
-#     # back to cpu for the prep of p-value/score computations
-#     pfms_cpu = Array(all_pfms);
-#     num_pfms = size(pfms_cpu,1);
-#     span_len_cpu = Array(span_lens);
-#     pfms_batch = [pfms_cpu[i,1:4,1:span_len_cpu[i]] for i = 1:num_pfms];
-#     pwms_cpu = [pfm2pwm(pfm) for pfm in pfms_batch];
-#     thresh = cu([pvalue2score(pwm, pval_thresh) for pwm in pwms_cpu]);
-#     # prep for the scan
-#     pwms = CUDA.zeros(Float16, size(all_pfms)); # TODO change type
-#     CUDA.@sync @cuda threads=t1 blocks=ceil(Int, num_pfms/t1) pfm_arr2pwm_arr(all_pfms,pwms);
-#     # scan
-#     pos_scores = CUDA.zeros(Float16, num_pfms, N, L); # TODO change type
-#     CUDA.@sync @cuda threads=ker_3d blocks=b_size_3d(pos_scores) greedy_search!(pwms, 
-#                                                                  data_dat_gpu, 
-#                                                                  span_lens, 
-#                                                                  pos_scores,
-#                                                                  thresh)
-#     pos_scores_pos = dropdims(map(x-> x[3]==1 ? Int32(0) : Int32(x[3]), argmax(pos_scores, dims=3)),dims=3);
-#     # pos_scores_cpu = Array(pos_scores); # don't need scores (for now)
-#     pos_scores_pos_cpu = Array(pos_scores_pos);
-#     found = Array(findall(pos_scores_pos_cpu .> 0));
-#     # record the positions
-#     positions = [Dict{Int16, Int16}() for _ = 1:num_pfms]; # TODO change type
-#     # scores = [Dict{Int16, Float64}() for _ = 1:num_pfms]; # don't need scores (for now)
-#     for f in found
-#         positions[f[1]][f[2]] = pos_scores_pos_cpu[f[1],f[2]];
-#     end
-
-#     # free up memory
-#     pwms = nothing; pos_scores = nothing; thresh = nothing; pos_scores_pos = nothing;
-#     GC.gc(true); CUDA.reclaim(); GC.gc(true); GC.gc(false); CUDA.reclaim();   
-
-#     return motifs(
-#         pfms_batch,
-#         Int16.([size(pfm,2) for pfm in pfms_batch]),
-#         num_pfms,
-#         positions, 
-#         nothing, 
-#         Dict{Int16, Bool}(i=>false for i = 1:num_pfms), # TODO change type
-#         Int16.([size(pfm,2) for pfm in pfms_batch])
-#     )
-# end
-
 function get_f_pair_starts(indices_gpu, 
                            ar_start_positions, 
                            ar_fil_lens, 
@@ -234,17 +189,3 @@ function msa_pseudocount(msas_2d, span_len)
     end
     return nothing
 end
-
-# function pfm_arr2pwm_arr(pfms, pwms)
-#     i = (blockIdx().x - 1) * blockDim().x + threadIdx().x; # ith pair 
-#     I, A, maxlen = size(pfms);
-#     if i ≤ I
-#         for a = 1:A
-#             for l = 1:maxlen
-#                 pwms[i,a,l] = pfms[i,a,l] != 0 ? log2(pfms[i,a,l]/.25) : pwms[i,a,l];
-#             end
-#         end
-#     end
-#     return nothing
-# end
-
