@@ -178,7 +178,6 @@ function extend!(g::good_stuff{T,S,Q}; re_evaluate_pfm=true,
                     re_evaluate_scores=false, 
                     smoothing=true) where {T,S,Q}
     @inbounds for l = 1:g.ms.num_motifs
-        # ps=S(g.search.pseudocounts_r*length(g.ms.positions[l]));
         ps = g.search.pseudocounts;
         if !isnothing(g.ms.use_comp)
             g.ms.positions[l], g.ms.lens[l] = extension!(g.data.L, 
@@ -188,9 +187,6 @@ function extend!(g::good_stuff{T,S,Q}; re_evaluate_pfm=true,
                                 perc_no_less_than=g.search.perc_no_less_than, 
                                 ic_extension_thresh=g.search.ic_extension_thresh);
         else
-            # ps=S(1.2*g.search.pseudocounts_r*length(g.ms.positions[l]))
-            # ps=S(20);
-            # ps = g.search.pseudocounts;
             g.ms.positions[l], g.ms.lens[l] = extension!(g.data.L, 
                             g.ms.positions[l], g.ms.lens[l], g.data.data_matrix,
                             g.search.bg, T, S, ps;

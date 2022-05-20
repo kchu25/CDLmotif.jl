@@ -39,8 +39,6 @@ function get_ssc(g::good_stuff{T,S,Q}) where {T,S,Q}
     return ssc
 end
 
-# save_found_results_sim(g)
-
 function find_motif(g::good_stuff)
 
     ar, at = cdl_optimize(g);
@@ -160,20 +158,3 @@ function try_to_find_motif(data;
         return nothing
     end
 end
-
-
-# j=5;
-# while(j>0)
-#     try
-#         g = good_stuff{int_t,dat_t,cdl_c}(data, cdl_setup, search_setup);
-#         @time find_motif(g)
-#         break
-#     catch e
-#         if isa(e, ArgumentError)
-#             println("haha")
-#             j-=1
-#         else
-#             break
-#         end        
-#     end
-# end
